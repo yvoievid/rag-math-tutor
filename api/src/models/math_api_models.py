@@ -5,6 +5,7 @@ from langchain_core.documents import Document
 from typing_extensions import List, TypedDict
 from typing import Literal
 from typing_extensions import Annotated
+from typing import List, Dict, Optional
 
 class MathQueryInput(BaseModel):
     text: str
@@ -15,9 +16,10 @@ class Search(TypedDict):
 
 class State(TypedDict):
     question: str
-    query: Search
-    context: List[Document]
-    answer: str
+    query: Optional[Search] = {}
+    context: Optional[List[Document]] = []
+    wolfram_answer: Optional[List[str]] = []
+    answer: Optional[str] = ""
 
 class QueryRequest(BaseModel):
     question: str

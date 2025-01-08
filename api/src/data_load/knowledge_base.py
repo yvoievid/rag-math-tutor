@@ -31,8 +31,7 @@ class PDFKnowledgeBase:
         self.pdf_source_folder_path = pdf_source_folder_path
 
     def load_pdfs(self):
-        # method to load all the pdf's inside the directory
-        # using DirectoryLoader
+
         loader = DirectoryLoader(
             self.pdf_source_folder_path
         )
@@ -42,30 +41,25 @@ class PDFKnowledgeBase:
     def split_documents(self, loaded_docs,
                         chunk_size: Optional[int] = 500,
                         chunk_overlap: Optional[int] = 20,):
-        # split the documents into chunks and return the 
-        # chunked documents
+ 
         splitter = RecursiveCharacterTextSplitter(
                 chunk_size=chunk_size,
                 chunk_overlap=chunk_overlap,
             )
             
-        # Now split the documents into chunks and return
         chunked_docs = splitter.split_documents(loaded_docs)
         return chunked_docs
         
     def convert_document_to_embeddings(
         self, chunked_docs, embedder
     ):
-        # convert the chunked docs to embeddings and add that 
-        # to our vector db
+   
         vector_db = Chroma(
             persist_directory=CHROMA_DB_DIRECTORY,
             embedding_function=embedder,
             client_settings=CHROMA_SETTINGS,
         )
         
-        # now once instantiated we tell our db to inject the chunks
-        # and save all inside the db directory
         vector_db.add_documents(chunked_docs)
         vector_db.persist()
 
@@ -75,8 +69,7 @@ class PDFKnowledgeBase:
     def return_retriever_from_persistant_vector_db(
         self, embedding_function
     ):  
-        # return a retriever object which will retrieve the 
-        # relevant chunks 
+
         if not os.path.isdir(CHROMA_DB_DIRECTORY):
                 raise NotADirectoryError(
                     "Please load your vector database first."
