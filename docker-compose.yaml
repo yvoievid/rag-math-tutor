@@ -1,0 +1,28 @@
+version: '3'
+
+networks:
+  app_network:
+    driver: bridge
+
+services:
+  ui:
+    build:
+      context: ./ui
+    env_file:
+      - .env
+    depends_on:
+      - chatbot_api
+    ports:
+      - "8501:8501"
+    networks:
+      - app_network
+
+  chatbot_api:
+    build:
+      context: ./api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - app_network
